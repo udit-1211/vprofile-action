@@ -1,9 +1,9 @@
 name: vprofile actions
 on: workflow_dispatch
 env:
-  AWS_REGION: us-east-2
-  ECR_REPOSITORY: gitops
-  EKS_CLUSTER: gitops-eks
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: vprofileapp
+  EKS_CLUSTER: vprofile-eks
 
 jobs:
   Testing:
@@ -87,7 +87,7 @@ jobs:
         run: cat ~/.kube/config
 
       - name: Login to ECR
-        run: kubectl create secret docker-registry regicre --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS --docker-password=$(aws ecr get-login-password)
+        run: kubectl create secret docker-registry regicred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS --docker-password=$(aws ecr get-login-password)
 
       - name: Deploy Helm
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
@@ -96,7 +96,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
           cluster-name: ${{ env.EKS_CLUSTER }}
-          chart-path: helm/gitopscharts
+          chart-path: helm/vprofilecharts
           namespace: default
           values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
           name: vprofile-stack
