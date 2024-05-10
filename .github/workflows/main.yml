@@ -1,9 +1,9 @@
 name: vprofile actions
 on: workflow_dispatch
 env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY: vprofileapp
-  EKS_CLUSTER: vprofile-eks
+  AWS_REGION: us-east-2
+  ECR_REPOSITORY: gitops
+  EKS_CLUSTER: gitops-eks
 
 jobs:
   Testing:
@@ -96,7 +96,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
           cluster-name: ${{ env.EKS_CLUSTER }}
-          chart-path: helm/vprofilecharts
+          chart-path: helm/gitopscharts
           namespace: default
           values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
           name: vprofile-stack
